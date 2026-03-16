@@ -7,6 +7,7 @@ API em **.NET 8** para catálogo de jogos e gerenciamento de biblioteca de usuá
 - ASP.NET Core Web API (.NET 8)
 - Entity Framework Core
 - SQL Server
+- RabbitMQ (mensageria de eventos)
 - JWT Bearer Authentication
 - Swagger / OpenAPI
 - Serilog (logs estruturados)
@@ -22,11 +23,13 @@ API em **.NET 8** para catálogo de jogos e gerenciamento de biblioteca de usuá
 
 - .NET SDK 8.0+
 - SQL Server (local ou remoto)
+- RabbitMQ (local ou remoto)
 
 ## ⚙️ Configuração
 
 1. Ajuste a conexão com banco no arquivo `Catalog.Api/appsettings.json` em `ConnectionStrings:DefaultConnection`.
 2. Revise as configurações JWT em `Jwt` (`Issuer`, `Audience`, `Secret`, `ExpirationMinutes`).
+3. Configure a seção `RabbitMq` em `Catalog.Api/appsettings.json` (`HostName`, `Port`, `UserName`, `Password`, `VirtualHost` e nomes das filas).
 
 > Recomenda-se utilizar variáveis de ambiente ou `dotnet user-secrets` para segredos em ambiente local.
 
@@ -117,6 +120,12 @@ Exemplo de resposta:
 ### Diagnóstico do usuário autenticado
 
 - `GET /api/UserId/me`
+
+## 📣 Mensageria de eventos (RabbitMQ)
+
+- Ao vincular um jogo para o usuário, a API publica `OrderPlacedEvent` na fila `catalog.order.placed`.
+- O processamento de pagamento deve publicar `PaymentProcessedEvent` na fila `catalog.payment.processed`.
+- A API possui um consumidor em background que lê `PaymentProcessedEvent` e atualiza o status da biblioteca.
 
 ## 💳 Processamento de pagamento
 

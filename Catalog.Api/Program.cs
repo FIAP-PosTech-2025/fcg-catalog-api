@@ -119,6 +119,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+builder.Services.Configure<RabbitMqOptions>(
+    builder.Configuration.GetSection(RabbitMqOptions.SectionName));
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
@@ -128,7 +131,9 @@ builder.Services.AddScoped<IJogoService, JogoService>();
 builder.Services.AddScoped<IBibliotecaJogoRepository, BibliotecaJogoRepository>();
 builder.Services.AddScoped<IBibliotecaJogoService, BibliotecaJogoService>();
 builder.Services.AddScoped<IOrderPlacedEventPublisher, OrderPlacedEventPublisher>();
-builder.Services.AddScoped<IPaymentProcessedEventConsumer, PaymentProcessedEventConsumer>();
+builder.Services.AddSingleton<PaymentProcessedEventConsumer>();
+builder.Services.AddSingleton<IPaymentProcessedEventConsumer>(sp => sp.GetRequiredService<PaymentProcessedEventConsumer>());
+builder.Services.AddHostedService(sp => sp.GetRequiredService<PaymentProcessedEventConsumer>());
 
 var app = builder.Build();
 
