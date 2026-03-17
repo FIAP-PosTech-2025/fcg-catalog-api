@@ -43,7 +43,7 @@ dotnet build Catalog.sln
 dotnet run --project Catalog.Api
 ```
 
-Por padrão, a API sobe com Swagger em ambiente de desenvolvimento.
+Por padrão, a API sobe com Swagger em ambiente de desenvolvimento em `http://localhost:5001/swagger`.
 
 ## 🗄️ Banco de dados (migrations)
 
@@ -147,11 +147,51 @@ Os logs são gravados em:
 - `logs/info-*.json` para eventos até nível `Information`
 - `logs/error-*.json` para eventos de erro
 
+
+## 🐳 Docker e ☸️ Kubernetes
+
+### Build e execução com Docker
+
+Com Docker
+
+```bash
+docker compose up -d --build
+```
+
+Para derrubar os containers:
+
+```bash
+docker compose down
+```
+
+Swagger disponível em:
+
+```text
+http://localhost:5001/swagger
+```
+
+
+
+### Manifestos Kubernetes
+
+Os manifestos estão na pasta `k8s/` na raiz do projeto e incluem:
+
+- `Deployment` (`k8s/deployment.yaml`) para gerenciamento de pods
+- `Service` (`k8s/service.yaml`) para exposição interna
+- `ConfigMap` (`k8s/configmap.yaml`) para configurações não sensíveis
+- `Secret` (`k8s/secret.yaml`) para dados sensíveis
+
+Aplicação:
+
+```bash
+kubectl apply -k k8s/
+```
+
+> Antes de aplicar, ajuste os valores de `k8s/secret.yaml` (senhas/chaves).
+
 ## 🤝 Contribuição
 
 - Clovis Ribeiro Ramos - rm369652
 - Matheus Machado Pinheiro do Valle - rm369919
 - Pedro Delgado Henriques -rm369869
 - Jose Mauro Morais Mani -rm
-
-

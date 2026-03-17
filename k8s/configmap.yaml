@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-api-config
+  labels:
+    app: catalog-api
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:5001"
+  RabbitMq__HostName: "rabbitmq"
+  RabbitMq__Port: "5672"
+  RabbitMq__UserName: "catalog_user"
+  RabbitMq__VirtualHost: "/"
+  RabbitMq__OrderPlacedQueue: "catalog.order.placed"
+  RabbitMq__PaymentProcessedQueue: "catalog.payment.processed"

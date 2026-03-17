@@ -92,7 +92,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<CatalogDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null)));
 
 builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection("Jwt"));
