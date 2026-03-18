@@ -11,5 +11,5 @@ data:
   RabbitMq__Port: "5672"
   RabbitMq__UserName: "guest"
   RabbitMq__VirtualHost: "/"
-  RabbitMq__OrderPlacedQueue: "tccatalog.order.placed"
-  RabbitMq__PaymentProcessedQueue: "tccatalog.payment.processed"
+  RabbitMq__OrderPlacedQueue: "OrderPlaced"
+  RabbitMq__PaymentProcessedQueue: "PaymentProcessed"
