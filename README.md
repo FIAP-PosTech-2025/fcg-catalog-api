@@ -123,8 +123,8 @@ Exemplo de resposta:
 
 ## 📣 Mensageria de eventos (RabbitMQ)
 
-- Ao vincular um jogo para o usuário, a API publica `OrderPlacedEvent` na fila `tccatalog.order.placed`.
-- O processamento de pagamento deve publicar `PaymentProcessedEvent` na fila `tccatalog.payment.processed`.
+- Ao vincular um jogo para o usuário, a API publica `OrderPlacedEvent` na fila.
+- O processamento de pagamento deve publicar `PaymentProcessedEvent` na fila.
 - A API possui um consumidor em background que lê `PaymentProcessedEvent` e atualiza o status da biblioteca.
 
 ## 💳 Processamento de pagamento
