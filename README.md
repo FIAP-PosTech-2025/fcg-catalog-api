@@ -11,6 +11,7 @@ API em **.NET 8** para catálogo de jogos e gerenciamento de biblioteca de usuá
 - JWT Bearer Authentication
 - Swagger / OpenAPI
 - Serilog (logs estruturados)
+- Docker / Docker Compose
 
 ## 🧱 Estrutura da solução
 
@@ -24,14 +25,14 @@ API em **.NET 8** para catálogo de jogos e gerenciamento de biblioteca de usuá
 - .NET SDK 8.0+
 - SQL Server (local ou remoto)
 - RabbitMQ (local ou remoto)
+- Docker Desktop (opcional, para execução em container)
 
 ## ⚙️ Configuração
 
 1. Ajuste a conexão com banco no arquivo `TcCatalog.Api/appsettings.json` em `ConnectionStrings:DefaultConnection`.
 2. Revise as configurações JWT em `Jwt` (`Issuer`, `Audience`, `Secret`, `ExpirationMinutes`).
 3. Configure a seção `RabbitMq` em `TcCatalog.Api/appsettings.json` (`HostName`, `Port`, `UserName`, `Password`, `VirtualHost` e nomes das filas).
-
-> Recomenda-se utilizar variáveis de ambiente ou `dotnet user-secrets` para segredos em ambiente local.
+4. Em ambiente local, prefira sobrescrever segredos por variáveis de ambiente.
 
 ## ▶️ Como executar
 
@@ -47,9 +48,8 @@ Por padrão, a API sobe com Swagger em ambiente de desenvolvimento em `http://lo
 
 ## 🗄️ Banco de dados (migrations)
 
-Para aplicar as migrations existentes:
-
 ```bash
+dotnet tool restore
 dotnet ef database update --project TcCatalog.Infra --startup-project TcCatalog.Api
 ```
 
@@ -150,8 +150,6 @@ Os logs são gravados em:
 
 ## 🐳 Docker e ☸️ Kubernetes
 
-### Build e execução com Docker
-
 Suba o RabbitMQ separado (fora do `docker-compose.yml` da API):
 
 ```bash
@@ -166,7 +164,7 @@ http://localhost:15672
 
 Credenciais padrão: `guest / guest`.
 
-Com Docker
+Para executar os containers:
 
 ```bash
 docker compose up -d --build
@@ -184,7 +182,11 @@ Swagger disponível em:
 http://localhost:5001/swagger
 ```
 
+### Observações sobre Docker
 
+- o `docker-compose.yml` publica a API na porta `5001`
+- a connection string no compose usa `host.docker.internal` para acessar o SQL Server da máquina host
+- antes de subir o container, garanta que o SQL Server esteja acessível em `host.docker.internal:1433`
 
 ### Manifestos Kubernetes
 
@@ -221,81 +223,6 @@ Se estiver usando **minikube**:
 
 ```bash
 minikube image load tccatalog-api:latest
-```
-
-### API não sobe após `kubectl apply -k k8s/`?
-
-Checklist rápido para diagnóstico:
-
-1. Verifique se o cluster está acessível:
-
-```bash
-kubectl config current-context
-kubectl cluster-info
-kubectl get nodes
-```
-
-2. Verifique status dos recursos da aplicação:
-
-```bash
-kubectl get deploy,po,svc
-kubectl describe deploy tccatalog-api
-kubectl logs deploy/tccatalog-api --all-containers=true --tail=200
-```
-
-3. Causas mais comuns neste projeto:
-
-- **Imagem inválida ou não publicada** (`ImagePullBackOff`/`ErrImagePull`): atualize `k8s/deployment.yaml` com uma imagem existente e com acesso pelo cluster.
-- **Connection string usando `localhost` no Pod**: em Kubernetes, `localhost` aponta para o próprio container. Configure `ConnectionStrings__DefaultConnection` para o host/Service real do banco.
-- **Serviço é `ClusterIP`**: para testar localmente, faça port-forward:
-
-```bash
-kubectl port-forward svc/tccatalog-api 5001:5001
-```
-
-Depois acesse:
-
-```text
-http://localhost:5001/swagger
-```
-
-### `http://localhost:5001/swagger` não abre
-
-Esse é o fluxo mínimo para funcionar com `ClusterIP`:
-
-```bash
-kubectl apply -k k8s/
-kubectl rollout restart deployment/tccatalog-api
-kubectl rollout status deployment/tccatalog-api
-kubectl port-forward svc/tccatalog-api 5001:5001
-```
-
-Se o `kubectl apply -k k8s/` mostrar `unchanged`, isso é normal (nenhuma mudança de manifesto). Para aplicar nova imagem/novo pod, faça `rollout restart`.
-
-Em outro terminal, teste:
-
-```bash
-curl -I http://localhost:5001/swagger
-```
-
-Atalho:
-
-```bash
-./scripts/k8s-open-swagger.sh
-```
-
-Se aparecer `exceeded its progress deadline`, normalmente é `ImagePullBackOff`, `CrashLoopBackOff` ou probe falhando. Rode:
-
-```bash
-./scripts/k8s-debug.sh
-```
-
-Neste projeto, uma causa comum é dependência externa indisponível (ex.: RabbitMQ/SQL Server). O consumidor de RabbitMQ foi preparado para re-tentar conexão sem derrubar a API, mas ainda é necessário corrigir os endpoints/credenciais no `ConfigMap`/`Secret` para o ambiente Kubernetes.
-
-Opcional: script de diagnóstico resumido
-
-```bash
-./scripts/k8s-debug.sh
 ```
 
 ## 👨🏻‍🎓 Alunos
