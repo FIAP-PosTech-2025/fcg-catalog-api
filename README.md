@@ -188,41 +188,34 @@ http://localhost:5001/swagger
 - a connection string no compose usa `host.docker.internal` para acessar o SQL Server da máquina host
 - antes de subir o container, garanta que o SQL Server esteja acessível em `host.docker.internal:1433`
 
-### Manifestos Kubernetes
+## ☸️ Kubernetes
 
 Os manifestos estão na pasta `k8s/` na raiz do projeto e incluem:
 
-- `Deployment` (`k8s/deployment.yaml`) para gerenciamento de pods
-- `Service` (`k8s/service.yaml`) para exposição interna
-- `ConfigMap` (`k8s/configmap.yaml`) para configurações não sensíveis
-- `Secret` (`k8s/secret.yaml`) para dados sensíveis
+- `k8s/deployment.yaml`: cria a aplicação com `Deployment`
+- `k8s/configmap.yaml`: armazena configurações não sensíveis
+- `k8s/secret.yaml`: armazena segredos e credenciais
+- `k8s/service.yaml`: expõe a API dentro do cluster
+- `k8s/kustomization.yaml`: aplica todos os recursos em conjunto
 
-Aplicação:
+Antes do deploy, revise principalmente os valores em `k8s/secret.yaml`, em especial:
+
+Para aplicar os recursos:
 
 ```bash
 kubectl apply -k k8s/
 ```
 
-> Antes de aplicar, ajuste os valores de `k8s/secret.yaml` (senhas/chaves).
->
-> O `Deployment` usa por padrão `image: tccatalog-api:latest`. Gere essa imagem antes do apply.
-
-Build da imagem local:
+Para acessar a API localmente via port-forward:
 
 ```bash
-docker build -t tccatalog-api:latest .
+kubectl port-forward service/tccatalog-api 5002:5002
 ```
 
-Se estiver usando **kind**:
+Depois disso, o Swagger pode ser acessado em:
 
-```bash
-kind load docker-image tccatalog-api:latest
-```
-
-Se estiver usando **minikube**:
-
-```bash
-minikube image load tccatalog-api:latest
+```text
+http://localhost:5001/swagger
 ```
 
 ## 👨🏻‍🎓 Alunos
