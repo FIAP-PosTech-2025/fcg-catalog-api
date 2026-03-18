@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: catalog-api
+  name: tccatalog-api
   labels:
-    app: catalog-api
+    app: tccatalog-api
 spec:
   selector:
-    app: catalog-api
+    app: tccatalog-api
   ports:
     - name: http
       protocol: TCP

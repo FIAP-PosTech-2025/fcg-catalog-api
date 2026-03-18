@@ -1,40 +1,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: catalog-api
+  name: tccatalog-api
   labels:
-    app: catalog-api
+    app: tccatalog-api
 spec:
   replicas: 2
+  progressDeadlineSeconds: 600
   selector:
     matchLabels:
-      app: catalog-api
+      app: tccatalog-api
   template:
     metadata:
       labels:
-        app: catalog-api
+        app: tccatalog-api
     spec:
       containers:
-        - name: catalog-api
-          image: your-registry/catalog-api:latest
+        - name: tccatalog-api
+          image: tccatalog-api:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5001
               name: http
           envFrom:
             - configMapRef:
-                name: catalog-api-config
+                name: tccatalog-api-config
             - secretRef:
-                name: catalog-api-secret
+                name: tccatalog-api-secret
           readinessProbe:
             tcpSocket:
               port: 5001
             initialDelaySeconds: 10
             periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 5001
+            failureThreshold: 30
+            periodSeconds: 10
           livenessProbe:
             tcpSocket:
               port: 5001
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
             periodSeconds: 15
           resources:
             requests:
