@@ -212,13 +212,13 @@ kubectl apply -k k8s/
 Para acessar a API localmente via port-forward:
 
 ```bash
-kubectl port-forward service/tccatalog-api 5002:5002
+kubectl port-forward service/tccatalog-api 5001:5001
 ```
 
 Depois disso, o Swagger pode ser acessado em:
 
 ```text
-http://localhost:5002/swagger
+http://localhost:5001/swagger
 ```
 
 ## 👨🏻‍🎓 Alunos
