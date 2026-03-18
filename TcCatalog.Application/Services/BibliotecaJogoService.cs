@@ -91,6 +91,22 @@ public class BibliotecaJogoService : IBibliotecaJogoService
         }).ToList();
     }
 
+    public async Task<IReadOnlyList<MinhaBibliotecaJogoDto>> GetJogosAprovadosDoUsuarioAsync(Guid userId, CancellationToken ct)
+    {
+        var itensBiblioteca = await _bibliotecaRepo.GetJogosDoUsuarioAsync(userId, ct);
+
+        return itensBiblioteca
+            .Where(item => item.Status == StatusBibliotecaJogo.Aprovado)
+            .Select(item => new MinhaBibliotecaJogoDto
+            {
+                Descricao = item.Jogo.Descricao,
+                Genero = item.Jogo.Genero,
+                Preco = item.Jogo.Preco,
+                DataCadastro = item.Jogo.DataCadastro
+            })
+            .ToList();
+    }
+
     private static string GetStatusDescricao(StatusBibliotecaJogo status)
         => status switch
         {

@@ -13,6 +13,8 @@ services:
       RabbitMq__UserName: guest
       RabbitMq__Password: guest
       RabbitMq__VirtualHost: /
+      RabbitMq__OrderPlacedQueue: OrderPlaced
+      RabbitMq__PaymentProcessedQueue: PaymentProcessed
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:

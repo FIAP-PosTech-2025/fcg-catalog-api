@@ -21,15 +21,14 @@ public class BibliotecaController : ControllerBase
     }
 
     /// <summary>
-    /// Retorna a biblioteca de jogos do usuário autenticado.
+    /// Retorna os jogos aprovados da biblioteca do usuario autenticado.
     /// </summary>
-    /// <param name="ct">Token para cancelamento da requisição.</param>
+    /// <param name="ct">Token para cancelamento da requisicao.</param>
     [HttpGet("me")]
-    public async Task<ActionResult<IReadOnlyList<BibliotecaJogoDto>>> MinhaBiblioteca(
+    public async Task<ActionResult<IReadOnlyList<MinhaBibliotecaJogoDto>>> MinhaBiblioteca(
         CancellationToken ct)
     {
-
-        var jogos = await _service.GetJogosDoUsuarioAsync( _currentUser.UserId.Value , ct);
+        var jogos = await _service.GetJogosAprovadosDoUsuarioAsync(_currentUser.UserId.Value, ct);
         return Ok(jogos);
     }
 }

@@ -4,12 +4,12 @@ public sealed class RabbitMqOptions
 {
     public const string SectionName = "RabbitMq";
 
-    public string HostName { get; init; } = "localhost";
+    public string HostName { get; init; } = null!;
     public int Port { get; init; } = 5672;
-    public string UserName { get; init; } = "guest";
-    public string Password { get; init; } = "guest";
-    public string VirtualHost { get; init; } = "/";
-
-    public string OrderPlacedQueue { get; init; } = "tccatalog.order.placed";
-    public string PaymentProcessedQueue { get; init; } = "tccatalog.payment.processed";
+    public string UserName { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public string VirtualHost { get; init; } = null!;
+	
+    public string OrderPlacedQueue { get; init; } = null!;
+    public string PaymentProcessedQueue { get; init; } = null!;
 }

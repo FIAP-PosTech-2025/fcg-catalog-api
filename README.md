@@ -39,7 +39,7 @@ No diretório raiz do repositório:
 
 ```bash
 dotnet restore
-dotnet build TcCatalog.sln
+dotnet build
 dotnet run --project TcCatalog.Api
 ```
 
