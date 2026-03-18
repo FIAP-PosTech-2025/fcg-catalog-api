@@ -48,12 +48,14 @@ Por padrão, a API sobe com Swagger em ambiente de desenvolvimento em `http://lo
 
 ## 🗄️ Banco de dados (migrations)
 
+Para aplicar as migrations existentes:
+
 ```bash
 dotnet tool restore
 dotnet ef database update --project TcCatalog.Infra --startup-project TcCatalog.Api
 ```
 
-Se necessário criar nova migration:
+Se precisar criar uma nova migration:
 
 ```bash
 dotnet ef migrations add NomeDaMigration --project TcCatalog.Infra --startup-project TcCatalog.Api
@@ -147,8 +149,9 @@ Os logs são gravados em:
 - `logs/info-*.json` para eventos até nível `Information`
 - `logs/error-*.json` para eventos de erro
 
+Além dos arquivos, a aplicação também escreve logs no console.
 
-## 🐳 Docker e ☸️ Kubernetes
+## 🐳 Docker
 
 Suba o RabbitMQ separado (fora do `docker-compose.yml` da API):
 
@@ -215,7 +218,7 @@ kubectl port-forward service/tccatalog-api 5002:5002
 Depois disso, o Swagger pode ser acessado em:
 
 ```text
-http://localhost:5001/swagger
+http://localhost:5002/swagger
 ```
 
 ## 👨🏻‍🎓 Alunos
