@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: tccatalog-api
-          image: tccatalog-api:latest
+          image: tccatalog-img:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5001

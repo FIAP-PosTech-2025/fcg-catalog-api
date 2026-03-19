@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: TcCatalog.Api/Dockerfile
+    image: tccatalog-img
     container_name: tccatalog-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development

@@ -201,7 +201,7 @@ Os manifestos estão na pasta `k8s/` na raiz do projeto e incluem:
 - `k8s/service.yaml`: expõe a API dentro do cluster
 - `k8s/kustomization.yaml`: aplica todos os recursos em conjunto
 
-Antes do deploy, revise principalmente os valores em `k8s/secret.yaml`, em especial:
+Antes do deploy, revise principalmente os valores em `k8s/secret.yaml`.
 
 Para aplicar os recursos:
 
@@ -212,7 +212,7 @@ kubectl apply -k k8s/
 Para acessar a API localmente via port-forward:
 
 ```bash
-kubectl port-forward service/tccatalog-api 5001:5001
+kubectl port-forward service/tccatalog-api 5001:80
 ```
 
 Depois disso, o Swagger pode ser acessado em:
