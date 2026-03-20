@@ -226,4 +226,3 @@ http://localhost:5001/swagger
 - Clovis Ribeiro Ramos - rm369652
 - Matheus Machado Pinheiro do Valle - rm369919
 - Pedro Delgado Henriques -rm369869
-- Jose Mauro Morais Mani -rm
